@@ -1,4 +1,6 @@
 #!/bin/bash
+#set -u
+#set -x
 
 if [ "$#" -ne 1 ]; then
     echo "Missing GitHub tokens"
