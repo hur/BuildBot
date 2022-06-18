@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import geni.portal as portal
 import geni.rspec.pg as PG
 import geni.rspec.igext as IG
