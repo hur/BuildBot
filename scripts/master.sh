@@ -52,5 +52,6 @@ git clone https://hur:$1@github.com/kpixel5.git
 cd $WORKINGDIR
 git clone https://hur:$1@github.com/hur/kernel_builds.git
 cd kernel_builds
+git config --global user.name "BuildBot"
 git commit --allow-empty -m "build finished"
 git push
