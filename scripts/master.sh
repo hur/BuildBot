@@ -2,8 +2,6 @@
 #set -u
 #set -x
 
-
-
 SCRIPTDIR=$(dirname "$0")
 WORKINGDIR='/local/repository'
 
@@ -54,7 +52,7 @@ mkdir android-kernel && cd android-kernel
 repo init -u https://android.googlesource.com/kernel/manifest -b android-msm-redbull-4.19-android12L
 repo sync -j$(($(nproc) + 1)) 
 
-git clone https://hur:$1@github.com/hur/kpixel5.git && cd kpixel5
+git clone https://hur:$1@github.com/j0lama/kpixel5.git && cd kpixel5
 
 /bin/bash setup.sh && cd ..
 
