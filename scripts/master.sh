@@ -56,7 +56,7 @@ mkdir android-kernel && cd android-kernel
 ~/bin/repo sync -j$(($(nproc) + 1)) 
 
 # get compilation scripts for pixel 5 & compile
-git clone https://hur:$1@github.com/j0lama/kpixel5.git && cd kpixel5
+git clone https://hur:$1@github.com/hur/kpixel5.git && cd kpixel5
 
 /bin/bash setup.sh && cd ..
 
