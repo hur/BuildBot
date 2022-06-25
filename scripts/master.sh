@@ -48,7 +48,7 @@ export PATH=$PATH:~/bin/repo
 
 # for repo non-interactive mode & build notifications
 git config --global user.name "BuildBot"
-git config --global email "buildbot@atteniemi.com"
+git config --global user.email "buildbot@atteniemi.com"
 
 # get android sources 
 mkdir android-kernel && cd android-kernel
