@@ -2,13 +2,15 @@
 #set -u
 #set -x
 
-if [ "$#" -ne 1 ]; then
-    echo "Missing GitHub tokens"
-    exit 1
-fi
+
 
 SCRIPTDIR=$(dirname "$0")
 WORKINGDIR='/local/repository'
+
+# Redirect output to log file
+exec >> ${WORKINGDIR}/deploy.log
+exec 2>&1
+
 username=$(id -nu)
 HOME=/users/$(id -un)
 usergid=$(id -ng)
@@ -17,9 +19,12 @@ projectid=$usergid
 
 sudo chown ${username}:${usergid} ${WORKINGDIR}/ -R
 cd $WORKINGDIR
-# Redirect output to log file
-exec >> ${WORKINGDIR}/deploy.log
-exec 2>&1
+
+
+if [ "$#" -ne 1 ]; then
+    echo "Missing GitHub tokens"
+    exit 1
+fi
 
 # make SSH shells play nice
 sudo chsh -s /bin/bash $username
