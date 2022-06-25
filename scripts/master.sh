@@ -2,13 +2,13 @@
 
 set -eux
 
+if [ "$#" -ne 1 ]; then
+    echo "Missing GitHub tokens" | tee /local/repository/deploy.log
+    exit 1
+fi
+
 SCRIPTDIR=$(dirname "$0")
 WORKINGDIR='/local/repository'
-
-# Redirect output to log file
-exec >> ${WORKINGDIR}/deploy.log
-exec 2>&1
-
 username=$(id -nu)
 HOME=/users/$(id -un)
 usergid=$(id -ng)
@@ -18,11 +18,9 @@ projectid=$usergid
 sudo chown ${username}:${usergid} ${WORKINGDIR}/ -R
 cd $WORKINGDIR
 
-
-if [ "$#" -ne 1 ]; then
-    echo "Missing GitHub tokens"
-    exit 1
-fi
+# Redirect output to log file
+exec >> ${WORKINGDIR}/deploy.log
+exec 2>&
 
 # make SSH shells play nice
 sudo chsh -s /bin/bash $username
@@ -57,6 +55,7 @@ mkdir android-kernel && cd android-kernel
 ~/bin/repo init -u https://android.googlesource.com/kernel/manifest -b android-msm-redbull-4.19-android12L < /dev/null
 ~/bin/repo sync -j$(($(nproc) + 1)) 
 
+# get compilation scripts for pixel 5 & compile
 git clone https://hur:$1@github.com/j0lama/kpixel5.git && cd kpixel5
 
 /bin/bash setup.sh && cd ..
