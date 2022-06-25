@@ -8,7 +8,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 SCRIPTDIR=$(dirname "$0")
-WORKINGDIR='/local/repository'
+WORKINGDIR='/buildbot'
 username=$(id -nu)
 HOME=/users/$(id -un)
 usergid=$(id -ng)
