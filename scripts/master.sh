@@ -20,7 +20,7 @@ cd $WORKINGDIR
 
 # Redirect output to log file
 exec >> ${WORKINGDIR}/deploy.log
-exec 2>&
+exec 2>&1
 
 # make SSH shells play nice
 sudo chsh -s /bin/bash $username
