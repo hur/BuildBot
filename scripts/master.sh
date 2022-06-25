@@ -39,15 +39,22 @@ sudo apt-get -y install git ccache automake flex lzop bison \
     schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev \
     pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl \
     libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev \
-    x11proto-core-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip \ 
-    repo
+    x11proto-core-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip
+
+# install repo
+export REPO=$(mktemp /tmp/repo.XXXXXXXXX)
+curl -o ${REPO} https://storage.googleapis.com/git-repo-downloads/repo
+gpg --recv-key 8BB9AD793E8E6153AF0F9A4416530D5E920F5C65
+curl -s https://storage.googleapis.com/git-repo-downloads/repo.asc | gpg --verify - ${REPO} && install -m 755 ${REPO} ~/bin/repo
+
+export PATH=$PATH:~/bin/repo
 
 # get android sources 
 mkdir android-kernel && cd android-kernel
 repo init -u https://android.googlesource.com/kernel/manifest -b android-msm-redbull-4.19-android12L
 repo sync -j$(($(nproc) + 1)) 
 
-git clone https://hur:$1@github.com/kpixel5.git && cd kpixel5
+git clone https://hur:$1@github.com/hur/kpixel5.git && cd kpixel5
 
 /bin/bash setup.sh && cd ..
 
