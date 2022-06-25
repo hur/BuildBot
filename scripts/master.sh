@@ -2,13 +2,15 @@
 
 set -eux
 
-if [ "$#" -ne 1 ]; then
-    echo "Missing GitHub tokens" | tee /local/repository/deploy.log
+WORKINGDIR='/buildbot'
+LOGFILE="${WORKINGDIR}/deploy.log"
+
+if [ "$#" -ne 2 ]; then
+    echo "Missing GitHub tokens and/or username" | tee $LOGFILE
     exit 1
 fi
 
 SCRIPTDIR=$(dirname "$0")
-WORKINGDIR='/buildbot'
 username=$(id -nu)
 HOME=/users/$(id -un)
 usergid=$(id -ng)
@@ -19,7 +21,7 @@ sudo chown ${username}:${usergid} ${WORKINGDIR}/ -R
 cd $WORKINGDIR
 
 # Redirect output to log file
-exec >> ${WORKINGDIR}/deploy.log
+exec >> $LOGFILE
 exec 2>&1
 
 # make SSH shells play nice
@@ -56,7 +58,7 @@ mkdir android-kernel && cd android-kernel
 ~/bin/repo sync -j$(($(nproc) + 1)) 
 
 # get compilation scripts for pixel 5 & compile
-git clone https://hur:$1@github.com/hur/kpixel5.git && cd kpixel5
+git clone https://$2:$1@github.com/hur/kpixel5.git && cd kpixel5
 
 /bin/bash setup.sh && cd ..
 
@@ -66,7 +68,7 @@ git clone https://hur:$1@github.com/hur/kpixel5.git && cd kpixel5
 
 # Rudimentary build completed notification, maybe push binaries to the repo later.
 cd $WORKINGDIR
-git clone https://hur:$1@github.com/hur/kernel_builds.git
+git clone https://$2:$1@github.com/hur/kernel_builds.git
 cd kernel_builds
 
 git commit --allow-empty -m "build finished"

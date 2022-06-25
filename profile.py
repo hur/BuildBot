@@ -8,6 +8,8 @@ import geni.rspec.emulab
 pc = portal.Context()
 rspec = PG.Request()
 
+pc.defineParameter("user", "GitHub Username",
+        portal.ParameterType.STRING, "hur")
 pc.defineParameter("token", "GitHub Token",
                    portal.ParameterType.STRING, "")
 
@@ -25,6 +27,6 @@ builder.disk_image = 'urn:publicid:IDN+emulab.net+image+emulab-ops:UBUNTU18-64-S
 bs = builder.Blockstore("bs", "/buildbot")
 bs.size = "80GB" # storage for android kernel sources
 
-builder.addService(PG.Execute(shell="bash", command="/local/repository/scripts/master.sh " + params.token))
+builder.addService(PG.Execute(shell="bash", command="/local/repository/scripts/master.sh " + params.token + " " + params.user))
 
 pc.printRequestRSpec(rspec)
