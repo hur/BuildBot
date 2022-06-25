@@ -1,6 +1,6 @@
 #!/bin/bash
-#set -u
-#set -x
+
+set -eux
 
 SCRIPTDIR=$(dirname "$0")
 WORKINGDIR='/local/repository'
@@ -40,17 +40,22 @@ sudo apt-get -y install git ccache automake flex lzop bison \
     x11proto-core-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip
 
 # install repo
+mkdir ~/bin
 export REPO=$(mktemp /tmp/repo.XXXXXXXXX)
 curl -o ${REPO} https://storage.googleapis.com/git-repo-downloads/repo
-gpg --recv-key 8BB9AD793E8E6153AF0F9A4416530D5E920F5C65
+gpg --keyserver keys.openpgp.org --recv-key 8BB9AD793E8E6153AF0F9A4416530D5E920F5C65
 curl -s https://storage.googleapis.com/git-repo-downloads/repo.asc | gpg --verify - ${REPO} && install -m 755 ${REPO} ~/bin/repo
 
 export PATH=$PATH:~/bin/repo
 
+# for repo non-interactive mode & build notifications
+git config --global user.name "BuildBot"
+git config --global email "buildbot@atteniemi.com"
+
 # get android sources 
 mkdir android-kernel && cd android-kernel
-repo init -u https://android.googlesource.com/kernel/manifest -b android-msm-redbull-4.19-android12L
-repo sync -j$(($(nproc) + 1)) 
+~/bin/repo init -u https://android.googlesource.com/kernel/manifest -b android-msm-redbull-4.19-android12L < /dev/null
+~/bin/repo sync -j$(($(nproc) + 1)) 
 
 git clone https://hur:$1@github.com/j0lama/kpixel5.git && cd kpixel5
 
@@ -64,6 +69,6 @@ git clone https://hur:$1@github.com/j0lama/kpixel5.git && cd kpixel5
 cd $WORKINGDIR
 git clone https://hur:$1@github.com/hur/kernel_builds.git
 cd kernel_builds
-git config --global user.name "BuildBot"
+
 git commit --allow-empty -m "build finished"
 git push
