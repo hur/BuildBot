@@ -62,14 +62,9 @@ git clone https://$2:$1@github.com/hur/kpixel5.git && cd kpixel5
 
 /bin/bash setup.sh && cd ..
 
+# get the kernel module
+git clone https://$2:$1@github.com/hur/diag_talker.git
+
 /bin/bash build_pixel.sh
 /bin/bash build_boot_img.sh
 /bin/bash sign_image.sh
-
-# Rudimentary build completed notification, maybe push binaries to the repo later.
-cd $WORKINGDIR
-git clone https://$2:$1@github.com/hur/kernel_builds.git
-cd kernel_builds
-
-git commit --allow-empty -m "build finished"
-git push
